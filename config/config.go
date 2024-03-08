@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -23,7 +24,7 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	f, err := os.Open("book-service/config.yaml")
+	f, err := os.Open("config.yaml")
 	if err != nil {
 		panic(err)
 	}
@@ -35,5 +36,6 @@ func LoadConfig() *Config {
 	if err != nil {
 		panic(err)
 	}
+	log.Println("Got configs!")
 	return &cfg
 }
