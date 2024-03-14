@@ -1,17 +1,23 @@
 # Use the official Golang image as the base image
-FROM golang:1.22 as build-stage
+FROM golang:1.22 AS build-stage
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Go application source code into the container
+# Copy go.mod and go.sum files to cache dependencies
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the rest of the application source code
 COPY . .
 
 # Build the Go application
-RUN CGO_ENABLED=0 GOOS=linux go build -o book-service .
+RUN CGO_ENABLED=0 go build -o book-service .
 
 # Create a minimal runtime image
-FROM alpine:latest
+FROM alpine:3.19
 
 # Set the working directory inside the container
 WORKDIR /app
